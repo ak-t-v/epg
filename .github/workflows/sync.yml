@@ -1,0 +1,23 @@
+name: Sync Fork
+on:
+  schedule:
+    - cron: '0 0 * * *' # Runs every day at midnight UTC
+  workflow_dispatch: # Allows you to run it manually
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout target repo
+        uses: actions/checkout@v4
+        with:
+          ref: plus
+      - name: Sync upstream changes
+        uses: aormsby/Fork-Sync-With-Upstream-action@v3.4
+        with:
+          upstream_sync_repo: Animenosekai/epg
+          upstream_sync_branch: plus
+          target_sync_branch: plus
+          target_repo_token: ${{ secrets.GITHUB_TOKEN }}
+          test_mode: false
